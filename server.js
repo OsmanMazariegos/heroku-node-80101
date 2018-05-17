@@ -13,7 +13,7 @@ MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-p
   if (err) return console.log(err)
 
   app.listen(port, () => {
-    console.log('app working on '+port)
+    console.log('app working on ' + port)
   });
 
   let dbase = db.db("db_angular-pwa-app-firebase");
@@ -22,36 +22,39 @@ MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-p
     res.send("Yep it's working");
   });
 
-  app.post('/name/add', (req, res, next) => {
+  app.post('/api/template/add', (req, res, next) => {
 
-    let name = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name
+    let template = {
+      full_name: req.body.full_name,
+      u_id_tax: req.body.u_id_tax,
+      i_will_pay: req.body.i_will_pay,
+      pay_day: req.body.pay_day,
+      pledge_amount: req.body.pledge_amount
     };
 
-    dbase.collection("name").save(name, (err, result) => {
+    dbase.collection("template").save(template, (err, result) => {
       if(err) {
         console.log(err);
       }
 
-      res.send('name added successfully');
+      res.send('template added successfully');
     });
 
   });
 
-  app.get('/name', (req, res, next) => {
-    dbase.collection('name').find().toArray( (err, results) => {
+  app.get('/api/template', (req, res, next) => {
+    dbase.collection('template').find().toArray( (err, results) => {
       res.send(results)
     });
   });
 
-  app.get('/name/:id', (req, res, next) => {
+  app.get('/api/template/:id', (req, res, next) => {
     if(err) {
       throw err;
     }
 
     let id = ObjectID(req.params.id);
-    dbase.collection('name').find(id).toArray( (err, result) => {
+    dbase.collection('template').find(id).toArray( (err, result) => {
       if(err) {
         throw err;
       }
@@ -60,12 +63,12 @@ MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-p
     });
   });
 
-  app.put('/name/update/:id', (req, res, next) => {
+  app.put('/api/template/update/:id', (req, res, next) => {
     var id = {
       _id: new ObjectID(req.params.id)
     };
 
-    dbase.collection("name").update(id, {$set:{first_name: req.body.first_name, last_name: req.body.last_name}}, (err, result) => {
+    dbase.collection("template").update(id, {$set:{full_name: req.body.full_name,u_id_tax: req.body.u_id_tax,i_will_pay: req.body.i_will_pay, pay_day: req.body.pay_day, pledge_amount: req.body.pledge_amount}}, (err, result) => {
       if(err) {
         throw err;
       }
@@ -75,10 +78,10 @@ MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-p
   });
 
 
-  app.delete('/name/delete/:id', (req, res, next) => {
+  app.delete('/api/template/delete/:id', (req, res, next) => {
     let id = ObjectID(req.params.id);
 
-    dbase.collection('name').deleteOne({_id: id}, (err, result) => {
+    dbase.collection('template').deleteOne({_id: id}, (err, result) => {
       if(err) {
         throw err;
       }
