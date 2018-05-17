@@ -7,11 +7,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+var port = process.env.PORT || 8000
+
 MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-pwa-app-firebase', (err, db) => {
   if (err) return console.log(err)
 
-  app.listen(3000, () => {
-    console.log('app working on 3000')
+  app.listen(port, () => {
+    console.log('app working on '+port)
   });
 
   let dbase = db.db("db_angular-pwa-app-firebase");
