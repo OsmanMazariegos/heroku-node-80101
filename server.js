@@ -7,6 +7,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 var port = process.env.PORT || 8000
 
 MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-pwa-app-firebase', (err, db) => {
@@ -34,11 +41,13 @@ MongoClient.connect('mongodb://admin:Pa8irr@ds245238.mlab.com:45238/db_angular-p
 
     dbase.collection("template").save(template, (err, result) => {
       if(err) {
+        res.status(400).send("No se puede guardar en la base de datos");
         console.log(err);
       }
-
-      res.send('template added successfully');
+        res.status(200).json({'template': 'Plantilla añadida con éxito'});
     });
+
+    
 
   });
 
